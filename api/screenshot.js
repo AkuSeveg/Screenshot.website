@@ -1,64 +1,125 @@
-const axios = require('axios');
+const API_URL = '/api/screenshot';
 
-module.exports = async (req, res) => {
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+const form = document.getElementById('ss-form');
+const submitBtn = document.getElementById('submit-btn');
+const btnText = document.getElementById('btn-text');
+const loader = document.getElementById('loader');
+const resultArea = document.getElementById('result-area');
+const resultImg = document.getElementById('result-img');
+const downloadBtn = document.getElementById('download-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const extractedTextArea = document.getElementById('extracted-text'); 
+const shareLinkInput = document.getElementById('share-link');
+const copyLinkBtn = document.getElementById('copy-link-btn');
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+    resultArea.classList.add('result-hidden');
+    resultArea.style.display = 'none'; 
 
-    const { url, width = 1280, height = 720, full_page = false, device_scale = 2 } = req.body;
+    const payload = {
+        url: document.getElementById('url').value,
+        width: parseInt(document.getElementById('width').value) || 1280,
+        height: parseInt(document.getElementById('height').value) || 720,
+        device_scale: parseInt(document.getElementById('scale').value) || 2,
+        full_page: document.getElementById('fullpage').checked
+    };
 
     try {
-        if (!url || !url.startsWith('http')) {
-            throw new Error('URL tidak valid. Gunakan awalan https://');
-        }
-
-        // 1. Generate HD Screenshot & Shareable Link
-        const { data: imgData } = await axios.post('https://gcp.imagy.app/screenshot/createscreenshot', {
-            url: url,
-            browserWidth: parseInt(width),
-            browserHeight: parseInt(height),
-            fullPage: full_page === true || full_page === 'true',
-            deviceScaleFactor: parseInt(device_scale), 
-            format: 'png'
-        }, {
-            headers: {
-                'content-type': 'application/json',
-                referer: 'https://imagy.app/full-page-screenshot-taker/',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        if (!imgData.fileUrl) throw new Error('Gagal mendapatkan gambar dari server.');
-        
-        const shareableLink = imgData.fileUrl; 
-        let extractedText = "Sedang memproses teks...";
+        const data = await response.json();
 
-        // 2. Ekstrak Teks (OCR) via Public API
-        try {
-            const ocrRes = await axios.get(`https://api.ocr.space/parse/imageurl?apikey=helloworld&url=${encodeURIComponent(shareableLink)}`);
-            
-            if (ocrRes.data && ocrRes.data.ParsedResults && ocrRes.data.ParsedResults.length > 0) {
-                extractedText = ocrRes.data.ParsedResults[0].ParsedText.trim() || "Tidak ada teks terdeteksi.";
-            } else {
-                extractedText = "Gagal memindai teks.";
-            }
-        } catch (error) {
-            extractedText = "Fitur OCR sedang sibuk.";
+        if (data.success) {
+            handleSuccess(data.image_url, data.extracted_text);
+        } else {
+            alert('Gagal mengambil screenshot. Error: ' + (data.message || 'Tidak diketahui'));
         }
-
-        // 3. Final Response
-        return res.status(200).json({ 
-            success: true, 
-            image_url: shareableLink,     
-            extracted_text: extractedText, 
-            creator: "Yoanz"       
-        });
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        console.error('Error:', error);
+        alert('Terjadi kesalahan koneksi saat menghubungi server.');
+    } finally {
+        setLoading(false);
     }
-};
+});
+
+function setLoading(isLoading) {
+    if (isLoading) {
+        submitBtn.disabled = true;
+        loader.style.display = 'inline-block';
+        btnText.textContent = 'PROSES...';
+        if (extractedTextArea) extractedTextArea.value = 'Sedang mengekstrak teks dari gambar...';
+    } else {
+        submitBtn.disabled = false;
+        loader.style.display = 'none';
+        btnText.textContent = 'AMBIL SCREENSHOT';
+    }
+}
+
+function handleSuccess(url, text) {
+    resultImg.src = url;
+    
+    if (shareLinkInput) shareLinkInput.value = url;
+    if (extractedTextArea) extractedTextArea.value = text;
+    
+    resultArea.classList.remove('result-hidden');
+    resultArea.style.display = 'block';
+    
+    resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+if (copyLinkBtn && shareLinkInput) {
+    copyLinkBtn.addEventListener('click', () => {
+        shareLinkInput.select();
+        document.execCommand('copy');
+        
+        const originalText = copyLinkBtn.innerText;
+        copyLinkBtn.innerText = 'TERSALIN!';
+        setTimeout(() => copyLinkBtn.innerText = originalText, 2000);
+    });
+}
+
+downloadBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const imageUrl = resultImg.src;
+    const originalText = downloadBtn.innerHTML;
+    
+    downloadBtn.innerHTML = `<div class="loader" style="display:inline-block; border-color: black; border-bottom-color: transparent;"></div> MENGUNDUH...`;
+    downloadBtn.disabled = true;
+    
+    try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const tempUrl = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = tempUrl;
+        
+        const timestamp = new Date().getTime();
+        a.download = `yoanz-capture-${timestamp}.png`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(tempUrl);
+    } catch (err) {
+        console.error("Gagal auto-download", err);
+        window.open(imageUrl, '_blank');
+    } finally {
+        downloadBtn.innerHTML = originalText;
+        downloadBtn.disabled = false;
+    }
+});
+
+function toggleSidebar() {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+        }
