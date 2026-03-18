@@ -1,7 +1,5 @@
-// Konfigurasi API - Jangan diubah
 const API_URL = '/api/screenshot';
 
-// Element Selection Bawaan
 const form = document.getElementById('ss-form');
 const submitBtn = document.getElementById('submit-btn');
 const btnText = document.getElementById('btn-text');
@@ -11,24 +9,22 @@ const resultImg = document.getElementById('result-img');
 const downloadBtn = document.getElementById('download-btn');
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
-
-// Tambahan Element Baru untuk Fitur OCR & Share Link
 const extractedTextArea = document.getElementById('extracted-text'); 
 const shareLinkInput = document.getElementById('share-link');
 const copyLinkBtn = document.getElementById('copy-link-btn');
 
-// Event Listener Form
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     setLoading(true);
-    resultArea.style.display = 'none';
+    resultArea.classList.add('result-hidden');
+    resultArea.style.display = 'none'; 
 
     const payload = {
         url: document.getElementById('url').value,
         width: parseInt(document.getElementById('width').value) || 1280,
         height: parseInt(document.getElementById('height').value) || 720,
-        device_scale: parseInt(document.getElementById('scale').value) || 2, // Paksa HD
+        device_scale: parseInt(document.getElementById('scale').value) || 2,
         full_page: document.getElementById('fullpage').checked
     };
 
@@ -39,28 +35,33 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(payload)
         });
 
+        if (!response.ok) {
+            if (response.status === 504) {
+                throw new Error("Waktu habis (Timeout)! Proses terlalu berat untuk server Vercel Free. Coba matikan opsi Full Page atau turunkan Scale.");
+            }
+            throw new Error(`Server Error (${response.status}). Provider sedang sibuk atau URL target tidak dapat diakses.`);
+        }
+
         const data = await response.json();
 
         if (data.success) {
-            // Lempar url gambar dan teks OCR ke fungsi UI
             handleSuccess(data.image_url, data.extracted_text);
         } else {
             alert('Gagal mengambil screenshot. Error: ' + (data.message || 'Tidak diketahui'));
         }
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan koneksi saat menghubungi server.');
+        console.error('Error Detail:', error);
+        alert('Gagal: ' + error.message);
     } finally {
         setLoading(false);
     }
 });
 
-// Fungsi UI Helper
 function setLoading(isLoading) {
     if (isLoading) {
         submitBtn.disabled = true;
-        loader.style.display = 'block';
+        loader.style.display = 'inline-block';
         btnText.textContent = 'PROSES...';
         if (extractedTextArea) extractedTextArea.value = 'Sedang mengekstrak teks dari gambar...';
     } else {
@@ -70,31 +71,29 @@ function setLoading(isLoading) {
     }
 }
 
-// Menampilkan Hasil
 function handleSuccess(url, text) {
     resultImg.src = url;
     
-    // Nampilin Link & Teks OCR ke Form Input
     if (shareLinkInput) shareLinkInput.value = url;
     if (extractedTextArea) extractedTextArea.value = text;
     
+    resultArea.classList.remove('result-hidden');
     resultArea.style.display = 'block';
+    
     resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// Fitur Copy Link Shareable
 if (copyLinkBtn && shareLinkInput) {
     copyLinkBtn.addEventListener('click', () => {
         shareLinkInput.select();
         document.execCommand('copy');
         
         const originalText = copyLinkBtn.innerText;
-        copyLinkBtn.innerText = 'Tersalin!';
+        copyLinkBtn.innerText = 'TERSALIN!';
         setTimeout(() => copyLinkBtn.innerText = originalText, 2000);
     });
 }
 
-// UPDATE FITUR DOWNLOAD OTOMATIS
 downloadBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     const imageUrl = resultImg.src;
@@ -112,7 +111,6 @@ downloadBtn.addEventListener('click', async (e) => {
         a.href = tempUrl;
         
         const timestamp = new Date().getTime();
-        // NAMA FILE
         a.download = `yoanz-capture-${timestamp}.png`;
         
         document.body.appendChild(a);
@@ -120,7 +118,7 @@ downloadBtn.addEventListener('click', async (e) => {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(tempUrl);
     } catch (err) {
-        console.error("Gagal auto-download, fallback ke tab baru", err);
+        console.error("Gagal auto-download", err);
         window.open(imageUrl, '_blank');
     } finally {
         downloadBtn.innerHTML = originalText;
@@ -128,8 +126,7 @@ downloadBtn.addEventListener('click', async (e) => {
     }
 });
 
-// Sidebar Toggle Logic
 function toggleSidebar() {
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
-}
+        }
