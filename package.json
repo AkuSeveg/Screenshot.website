@@ -1,0 +1,10 @@
+{
+  "name": "yoanz-screenshot-tool",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/screenshot.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
