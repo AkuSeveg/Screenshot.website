@@ -3,34 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoanz Capture Pro</title>
+    <title>Yoanz Capture Pro | Cloud & OCR Screenshot</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <nav class="navbar fade-in-on-load">
         <div class="nav-brand">
             <div class="logo-box">
-                <i class="ri-camera-lens-fill"></i>
+                <i class="ri-focus-3-line"></i>
             </div>
-            <h1>𝐖𝐞𝐛𝐒𝐜𝐫𝐞𝐞𝐧𝐬𝐡𝐨𝐭 <span class="dot">.</span></h1>
+            <h1>𝐖𝐞𝐛𝐒𝐜𝐫𝐞𝐞𝐧𝐬𝐡𝐨𝐭 <span class="dot" style="color: var(--primary);">.</span></h1>
         </div>
         <button class="menu-btn" onclick="toggleSidebar()">
-            <i class="ri-menu-4-line"></i>
+            <i class="ri-menu-right-line"></i>
         </button>
     </nav>
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-head">
-            <h3>MENU</h3>
+            <h3>NAVIGASI</h3>
             <button onclick="toggleSidebar()"><i class="ri-close-large-line"></i></button>
         </div>
         <ul class="nav-links">
-            <li><a href="#generator" class="active"><i class="ri-macbook-line"></i> Generator</a></li>
-            <li><a href="#docs"><i class="ri-book-read-line"></i> Dokumentasi API</a></li>
-            <li><a href="#about"><i class="ri-information-line"></i> Tentang</a></li>
+            <li><a href="#generator" class="active"><i class="ri-macbook-line"></i> Workspace</a></li>
+            <li><a href="#docs"><i class="ri-code-box-line"></i> API Reference</a></li>
         </ul>
         <div class="sidebar-foot">
             <p>© 2026 Yoanz System</p>
@@ -38,53 +37,64 @@
     </aside>
 
     <main class="container">
-        <section id="generator" class="neo-card fade-in-on-load">
-            <div class="card-top">
-                <span class="badge red">REC</span>
-                <span class="badge-text">LIVE CAPTURE SYSTEM</span>
+        
+        <div class="hero-section fade-in-on-load" style="text-align: center; margin-bottom: 2.5rem; padding-top: 1rem;">
+            <div style="display: inline-block; padding: 6px 16px; background: rgba(59, 130, 246, 0.1); color: var(--primary); border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; font-family: var(--font-head);">
+                <i class="ri-sparkling-line"></i> V3.0 PRO EDITION
             </div>
-            
+            <h2 style="font-family: var(--font-head); font-size: 2.8rem; color: var(--text-main); margin-bottom: 15px; line-height: 1.2;">
+                Capture the Web.<br>
+                <span style="color: var(--primary);">Perfectly.</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                Ubah URL apapun menjadi tangkapan layar HD. Dilengkapi dengan auto-upload Cloud dan ekstraksi teks OCR cerdas dalam hitungan detik.
+            </p>
+        </div>
+
+        <section id="generator" class="neo-card fade-in-on-load" style="animation-delay: 0.1s;">
             <form id="ss-form">
-                <div class="form-group full-width">
-                    <label for="url">TARGET URL</label>
-                    <div class="input-box">
-                        <i class="ri-link-m"></i>
-                        <input type="url" id="url" placeholder="https://google.com" required>
+                
+                <div class="form-group full-width" style="margin-bottom: 2rem;">
+                    <label for="url" style="font-size: 0.85rem; color: var(--text-main);">URL TARGET</label>
+                    <div class="input-box" style="padding: 0.5rem 1rem;">
+                        <i class="ri-link" style="font-size: 1.2rem; color: var(--primary);"></i>
+                        <input type="url" id="url" placeholder="https://www.example.com" required style="font-size: 1.1rem; padding: 12px 10px;">
                     </div>
                 </div>
 
+                <div class="divider" style="text-align: left; margin-bottom: 15px; font-size: 0.75rem; color: #94a3b8;"><i class="ri-settings-4-line"></i> KONFIGURASI TAMPILAN</div>
+                
                 <div class="grid-2">
                     <div class="form-group">
                         <label>VIEWPORT WIDTH</label>
                         <div class="input-box">
                             <input type="number" id="width" value="1280">
-                            <span class="unit">PX</span>
+                            <span class="unit" style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">PX</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>VIEWPORT HEIGHT</label>
                         <div class="input-box">
                             <input type="number" id="height" value="720">
-                            <span class="unit">PX</span>
+                            <span class="unit" style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">PX</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>DEVICE SCALE</label>
-                        <div class="select-box">
-                            <select id="scale">
+                        <label>KUALITAS RENDER (SCALE)</label>
+                        <div class="input-box" style="padding-right: 0;">
+                            <select id="scale" style="cursor: pointer; padding: 12px 0;">
                                 <option value="1">1x (Standard)</option>
-                                <option value="2" selected>2x (Retina/HD)</option>
+                                <option value="2" selected>2x (Retina / HD)</option>
                                 <option value="3">3x (Ultra 4K)</option>
                             </select>
-                            <i class="ri-arrow-down-s-line"></i>
                         </div>
                     </div>
                     
-                    <div class="form-group toggle-group">
-                        <label>FULL PAGE</label>
+                    <div class="form-group toggle-group" style="display: flex; flex-direction: column; justify-content: center;">
+                        <label style="margin-bottom: 12px;">MODE FULL PAGE</label>
                         <label class="neo-switch">
                             <input type="checkbox" id="fullpage">
                             <span class="slider"></span>
@@ -92,15 +102,14 @@
                     </div>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn-neo main-btn">
+                <button type="submit" id="submit-btn" class="btn-neo main-btn" style="margin-top: 2rem;">
+                    <i class="ri-camera-lens-fill" style="font-size: 1.2rem;"></i>
                     <span id="btn-text">AMBIL SCREENSHOT</span>
-                    <i class="ri-arrow-right-up-line"></i>
-                    <div class="loader" id="loader"></div>
+                    <div class="loader" id="loader" style="display: none;"></div>
                 </button>
             </form>
 
-            <div id="result-area" class="result-hidden">
-                <div class="divider">HASIL CAPTURE</div>
+            <div id="result-area" class="result-hidden" style="margin-top: 3rem; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 2rem;">
                 
                 <div class="preview-window">
                     <div class="window-bar">
@@ -109,44 +118,53 @@
                             <span class="c yellow"></span>
                             <span class="c green"></span>
                         </div>
-                        <div class="address-bar">yoanz_result.png</div>
+                        <div class="address-bar"><i class="ri-lock-line" style="font-size: 0.7rem;"></i> yoanz-capture-result.png</div>
                     </div>
-                    <div class="img-container">
-                        <img id="result-img" src="" alt="Result">
+                    <div class="img-container" style="background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOklEQVQYV2NkYGAwYkAD////ZwjjgzhIEMbEpgjEABkgjiEFSBbCJJBkIbiT6B6C+RRZk2I00wUoAAC0iBEVvYf0kAAAAABJRU5ErkJggg==') repeat;">
+                        <img id="result-img" src="" alt="Screenshot Result" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                     </div>
                 </div>
 
-                <div class="form-group full-width mt-3">
-                    <label>🔗 SHAREABLE CLOUD LINK</label>
-                    <div class="share-area">
-                        <div class="input-box flex-grow">
-                            <input type="text" id="share-link" readonly>
+                <div class="grid-2" style="margin-top: 2rem; gap: 30px;">
+                    <div class="form-group">
+                        <label><i class="ri-cloud-line" style="color: var(--primary);"></i> TAUTAN CLOUD PUBLIK</label>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">URL ini siap dibagikan ke klien atau tim Anda. Tidak membebani storage lokal.</p>
+                        <div class="share-area">
+                            <div class="input-box">
+                                <input type="text" id="share-link" readonly style="font-family: var(--font-mono); font-size: 0.85rem;">
+                            </div>
+                            <button type="button" id="copy-link-btn" class="btn-neo" style="background: var(--text-main) !important;"><i class="ri-file-copy-line"></i></button>
                         </div>
-                        <button type="button" id="copy-link-btn" class="btn-neo">COPY</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="ri-text" style="color: var(--accent);"></i> TEKS HASIL EKSTRAKSI (OCR)</label>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">AI kami secara otomatis membaca dan menyalin teks dari dalam gambar screenshot.</p>
+                        <textarea id="extracted-text" readonly rows="4" style="font-size: 0.85rem; line-height: 1.5;"></textarea>
                     </div>
                 </div>
 
-                <div class="form-group full-width mt-3">
-                    <label>📝 HASIL SCAN TEKS (OCR)</label>
-                    <textarea id="extracted-text" readonly rows="5"></textarea>
-                </div>
-
-                <button id="download-btn" class="btn-neo download-btn mt-3">
-                    <i class="ri-download-fill"></i> DOWNLOAD FILE LOKAL
+                <button id="download-btn" class="btn-neo download-btn" style="margin-top: 1.5rem; background: #fff !important; color: var(--text-main) !important; border: 1px solid rgba(0,0,0,0.1) !important; box-shadow: 0 4px 6px rgba(0,0,0,0.02) !important;">
+                    <i class="ri-download-cloud-2-line"></i> SIMPAN KE PERANGKAT LOKAL
                 </button>
             </div>
         </section>
 
-        <section id="docs" class="neo-card mt-large fade-in-on-load">
-            <div class="card-head-simple">
-                <i class="ri-code-s-slash-line icon-box"></i>
-                <h3>API Reference</h3>
+        <section id="docs" class="neo-card fade-in-on-load" style="margin-top: 3rem; animation-delay: 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 8px; color: var(--primary);">
+                    <i class="ri-braces-line" style="font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h3 style="font-family: var(--font-head); font-size: 1.2rem;">Developer API</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Integrasikan layanan ini ke aplikasi Anda.</p>
+                </div>
             </div>
             
             <div class="api-content">
-                <div class="endpoint">
-                    <span class="method">POST</span>
-                    <code class="url">/api/screenshot</code>
+                <div class="endpoint" style="display: inline-flex; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+                    <span style="color: var(--accent); font-weight: 700; margin-right: 10px;">POST</span>
+                    <code style="color: var(--text-main);">/api/screenshot</code>
                 </div>
 
                 <div class="table-container">
@@ -154,56 +172,59 @@
                         <thead>
                             <tr>
                                 <th>Parameter</th>
-                                <th>Wajib?</th>
+                                <th>Wajib</th>
                                 <th>Deskripsi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><code>url</code></td>
-                                <td><span class="tag yes">YA</span></td>
-                                <td>URL target (awali http/https)</td>
+                                <td style="font-family: var(--font-mono); font-size: 0.85rem;">url</td>
+                                <td><span class="badge red" style="background: rgba(59,130,246,0.1); color: var(--primary); border-color: var(--primary);">YA</span></td>
+                                <td style="font-size: 0.85rem;">URL target (wajib diawali http:// atau https://)</td>
                             </tr>
                             <tr>
-                                <td><code>device_scale</code></td>
-                                <td><span class="tag no">TIDAK</span></td>
-                                <td>1 (Standard), 2 (HD), 3 (4K)</td>
+                                <td style="font-family: var(--font-mono); font-size: 0.85rem;">device_scale</td>
+                                <td><span class="badge" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid rgba(0,0,0,0.1);">TIDAK</span></td>
+                                <td style="font-size: 0.85rem;">Kualitas render. Opsi: 1 (Standard), 2 (HD), 3 (4K). Default: 2.</td>
                             </tr>
                             <tr>
-                                <td><code>full_page</code></td>
-                                <td><span class="tag no">TIDAK</span></td>
-                                <td>Boolean (true/false)</td>
+                                <td style="font-family: var(--font-mono); font-size: 0.85rem;">full_page</td>
+                                <td><span class="badge" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid rgba(0,0,0,0.1);">TIDAK</span></td>
+                                <td style="font-size: 0.85rem;">Boolean (true/false) untuk mengambil screenshot satu halaman penuh.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="code-block">
-                    <div class="code-header">JSON Request Example</div>
-                    <pre>{
-  "url": "https://tokopedia.com",
+                <div class="grid-2" style="margin-top: 2rem;">
+                    <div class="code-block" style="margin-top: 0;">
+                        <div class="code-header">Request Payload (JSON)</div>
+                        <pre>{
+  "url": "https://www.apple.com",
   "width": 1920,
   "height": 1080,
   "device_scale": 2,
-  "full_page": true
+  "full_page": false
 }</pre>
-                </div>
+                    </div>
 
-                <div class="code-block mt-3">
-                    <div class="code-header">JSON Response Success Example</div>
-                    <pre>{
+                    <div class="code-block" style="margin-top: 0;">
+                        <div class="code-header">Success Response (JSON)</div>
+                        <pre>{
   "success": true,
-  "image_url": "https://link-cloud-gambar.png",
-  "extracted_text": "Hasil scan teks OCR...",
+  "image_url": "https://cloud-link...",
+  "extracted_text": "iPhone 15 Pro...",
   "creator": "Yoanz"
 }</pre>
+                    </div>
                 </div>
             </div>
         </section>
 
         <footer class="main-footer">
-            <p>POWERED BY <strong>Yoanz</strong></p>
-            <p class="ver">v3.0.0 Pro Edition</p>
+            <div style="width: 40px; height: 4px; background: var(--primary); margin: 0 auto 15px auto; border-radius: 2px;"></div>
+            <p>POWERED BY <strong style="color: var(--text-main);">YOANZ SYSTEM</strong></p>
+            <p style="margin-top: 5px;">Build with Node.js & Serverless Architecture</p>
         </footer>
 
     </main>
@@ -211,4 +232,4 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
     <script src="script.js"></script>
 </body>
-</html>
+                </html>
